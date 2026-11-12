@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>JEPRAK SYSTEM</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Courier New', Courier, monospace; }
+        body { background: #e0e0e0; color: #111; display: flex; justify-content: center; align-items: center; min-height: 100vh; overflow: hidden; }
+
+        .page { display: none; width: 100%; max-width: 400px; height: 100vh; overflow-y: auto; background: #f4f4f4; position: relative; padding-bottom: 80px; }
+        .page.active { display: block; }
+
+        .comic-box {
+            background: #fff; border: 4px solid #111; border-radius: 12px;
+            box-shadow: 8px 8px 0px #111; padding: 20px; margin: 20px;
+        }
+
+        /* Login */
+        .login-box { margin-top: 50%; text-align: center; }
+        .login-box h1 { font-size: 24px; margin-bottom: 5px; text-transform: uppercase; }
+        .login-box .subtitle { font-size: 14px; margin-bottom: 20px; color: #555; }
+        input { width: 100%; padding: 12px; margin-bottom: 15px; border: 3px solid #111; border-radius: 8px; font-size: 16px; background: #eee; outline: none; }
+        
+        .btn-comic {
+            width: 100%; padding: 15px; background: #111; color: #fff; border: 3px solid #111;
+            border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer;
+            box-shadow: 4px 4px 0px #555; transition: all 0.1s;
+        }
+        .btn-comic:active { transform: translate(4px, 4px); box-shadow: 0px 0px 0px #555; }
+        .btn-full { width: 100%; margin-top: 10px; }
+
+        /* Top Bar & Banner */
+        .top-bar { display: flex; justify-content: space-between; align-items: center; margin: 20px 20px 10px 20px; }
+        .battery { display: flex; align-items: center; gap: 5px; font-weight: bold; }
+        .battery svg { width: 24px; fill: #111; }
+        .btn-logout { background: #ff0000; border: 3px solid #111; padding: 8px; border-radius: 8px; cursor: pointer; box-shadow: 4px 4px 0px #111; }
+        .btn-logout svg { width: 24px; fill: #fff; }
+        .btn-logout:active { transform: translate(4px, 4px); box-shadow: 0px 0px 0px #111; }
+
+        .banner-container {
+            margin: 0 20px 20px 20px; border: 4px solid #111; border-radius: 12px;
+            box-shadow: 8px 8px 0px #111; overflow: hidden; position: relative;
+            aspect-ratio: 1237 / 720; background: #000;
+        }
+        .banner-container video {
+            width: 100%; height: 100%; object-fit: cover;
+        }
+
+        /* Home */
+        .account-info h2 { font-size: 18px; margin-bottom: 10px; border-bottom: 3px solid #111; padding-bottom: 5px; }
+        .account-info p { font-size: 14px; margin-bottom: 5px; font-weight: bold; }
+        .sholat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 14px; font-weight: bold; }
+        .sholat-grid div { border: 2px solid #111; padding: 5px; text-align: center; background: #eee; }
+
+        /* Bottom Nav */
+        .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: #fff; border-top: 4px solid #111; display: flex; justify-content: space-around; padding: 10px; z-index: 100; max-width: 400px; margin: 0 auto; }
+        .nav-btn { background: none; border: none; padding: 10px; cursor: pointer; }
+        .nav-btn svg { width: 32px; fill: #888; }
+        .nav-btn.active svg { fill: #111; }
+
+        /* WA Menu */
+        .page-title { text-align: center; font-size: 22px; margin-top: 20px; text-transform: uppercase; }
+        label { display: block; font-weight: bold; margin-bottom: 10px; }
+        .slider-container { overflow-x: auto; display: flex; padding-bottom: 10px; }
+        .slider { display: flex; gap: 15px; }
+        .slide { min-width: 100px; padding: 15px; background: #eee; border: 3px solid #111; border-radius: 8px; text-align: center; font-weight: bold; cursor: pointer; box-shadow: 4px 4px 0 #111; }
+        .slide.active { background: #111; color: #fff; transform: translate(4px, 4px); box-shadow: 0 0 0 #111; }
+
+        /* Sender */
+        .sender-options { display: flex; gap: 15px; }
+        .sender-card { flex: 1; background: #eee; border: 3px solid #111; border-radius: 8px; padding: 15px; text-align: center; cursor: pointer; box-shadow: 4px 4px 0 #111; }
+        .sender-card svg { width: 40px; fill: #111; margin-bottom: 5px; }
+        .sender-card.active { background: #111; color: #fff; transform: translate(4px, 4px); box-shadow: 0 0 0 #111; }
+        .sender-card.active svg { fill: #fff; }
+
+        /* Pair */
+        .btn-plus { font-size: 50px; width: 80px; height: 80px; border-radius: 50%; background: #111; color: #fff; border: 4px solid #111; cursor: pointer; box-shadow: 6px 6px 0 #555; }
+        .btn-plus:active { transform: translate(6px, 6px); box-shadow: 0 0 0 #555; }
+        .paired-item { display: flex; justify-content: space-between; align-items: center; background: #eee; padding: 15px; border: 3px solid #111; border-radius: 8px; margin-top: 15px; }
+        .btn-delete { background: #ff0000; color: #fff; border: 2px solid #111; padding: 5px 10px; font-weight: bold; border-radius: 4px; cursor: pointer; }
+
+        /* ================= CUSTOM POPUP & LOADING ================= */
+        .popup-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 1000; justify-content: center; align-items: center; }
+        .popup-overlay.active { display: flex; }
+        .popup-content { width: 85%; max-width: 320px; text-align: center; position: relative; padding: 25px; }
+        .btn-x { position: absolute; top: -15px; right: -15px; background: #ff0000; color: #fff; border: 3px solid #111; width: 35px; height: 35px; border-radius: 50%; font-size: 18px; font-weight: bold; cursor: pointer; box-shadow: 3px 3px 0 #111; display: flex; justify-content: center; align-items: center; }
+        .btn-x:active { transform: translate(3px, 3px); box-shadow: 0 0 0 #111; }
+
+        /* Loading Overlay */
+        .loading-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 999; flex-direction: column; justify-content: center; align-items: center; }
+        .loading-overlay.active { display: flex; }
+        .loader-circle { width: 120px; height: 120px; border: 8px solid #fff; border-top: 8px solid #ff0000; border-radius: 50%; display: flex; justify-content: center; align-items: center; animation: spin 1s linear infinite; margin-bottom: 20px; }
+        .loader-circle span { color: #fff; font-size: 40px; font-weight: bold; animation: spin-reverse 1s linear infinite; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        @keyframes spin-reverse { 0% { transform: rotate(360deg); } 100% { transform: rotate(0deg); } }
+        .loading-box { background: #fff; border: 4px solid #111; padding: 20px; text-align: center; font-weight: bold; font-size: 16px; border-radius: 8px; box-shadow: 8px 8px 0 #ff0000; max-width: 80%; }
+    </style>
+</head>
+<body>
+
+    <!-- HALAMAN 1: LOGIN -->
+    <div id="loginPage" class="page active">
+        <div class="login-box comic-box">
+            <h1>TAMPILAN COMIC</h1>
+            <p class="subtitle">TEMA ELEGAN</p>
+            <input type="text" id="username" placeholder="Username">
+            <input type="password" id="password" placeholder="Password">
+            <button onclick="login()" class="btn-comic">AUTHENTICATION</button>
+        </div>
+    </div>
+
+    <!-- HALAMAN 2: BERANDA -->
+    <div id="homePage" class="page">
+        <div class="top-bar">
+            <div class="battery"><svg viewBox="0 0 24 24"><path d="M16 4h-2V2H10v2H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-2 16H10V6h4v14z"/></svg> 100%</div>
+            <button onclick="logout()" class="btn-logout"><svg viewBox="0 0 24 24"><path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/></svg></button>
+        </div>
+
+        <!-- BANNER VIDEO -->
+        <div class="banner-container">
+            <video autoplay loop muted playsinline>
+                <!-- Ganti URL src di bawah dengan link video custom lu -->
+                <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
+                Browser lu goblok, nggak support video!
+            </video>
+        </div>
+        
+        <div class="account-info comic-box">
+            <h2>INFO ACCOUNT</h2>
+            <p>EXPIRED: 2077/8/0</p>
+            <p>ROLE: RESSELER</p>
+            <p>NAME: JEPRI</p>
+        </div>
+
+        <div class="sholat-schedule comic-box">
+            <h3>JADWAL SHOLAT</h3>
+            <div class="sholat-grid">
+                <div>Subuh</div><div>04:30</div>
+                <div>Dzuhur</div><div>12:00</div>
+                <div>Ashar</div><div>15:15</div>
+                <div>Maghrib</div><div>18:00</div>
+                <div>Isya</div><div>19:15</div>
+            </div>
+        </div>
+
+        <div class="bottom-nav">
+            <button onclick="switchPage('homePage', 0)" class="nav-btn active"><svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg></button>
+            <button onclick="switchPage('waPage', 1)" class="nav-btn"><svg viewBox="0 0 24 24"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0012.04 2z"/></svg></button>
+            <button onclick="switchPage('pairPage', 2)" class="nav-btn"><svg viewBox="0 0 24 24"><path d="M17 1H7c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-2-2-2zm0 18H7V5h10v14z"/></svg></button>
+        </div>
+    </div>
+
+    <!-- HALAMAN 3: BUG WHATSAPP -->
+    <div id="waPage" class="page">
+        <h2 class="page-title">BUG WHATSAPP</h2>
+        
+        <div class="comic-box">
+            <label>NOMOR TARGET</label>
+            <input type="number" id="targetNumber" placeholder="62xxxxxxxxxx">
+        </div>
+
+        <div class="comic-box">
+            <label>PILIH BUG (GESER)</label>
+            <div class="slider-container">
+                <div class="slider" id="bugSlider">
+                    <div class="slide active" onclick="selectBug('FC', this)">FC</div>
+                    <div class="slide" onclick="selectBug('DELAY', this)">DELAY</div>
+                    <div class="slide" onclick="selectBug('FC HARD', this)">FC HARD</div>
+                </div>
+            </div>
+            <p style="text-align:center; margin-top:10px; font-weight:bold;" id="selectedBugText">Terpilih: FC</p>
+        </div>
+
+        <div class="comic-box sender-box">
+            <label>PILIH SENDER</label>
+            <div class="sender-options">
+                <div class="sender-card active" onclick="selectSender('Pribadi', this)">
+                    <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                    <p>Pribadi</p>
+                    <p style="color: #00ff00;" id="senderPribadiCount">Sender: 0</p>
+                </div>
+                <div class="sender-card" onclick="selectSender('Global', this)">
+                    <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+                    <p>Global</p>
+                    <p style="color: #00ff00;" id="senderGlobalCount">Sender: 0</p>
+                </div>
+            </div>
+        </div>
+
+        <button onclick="sendBug()" class="btn-comic btn-full" style="width: calc(100% - 40px); margin: 0 20px;">KIRIM BUG</button>
+        
+        <div class="bottom-nav">
+            <button onclick="switchPage('homePage', 0)" class="nav-btn"><svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg></button>
+            <button onclick="switchPage('waPage', 1)" class="nav-btn active"><svg viewBox="0 0 24 24"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0012.04 2z"/></svg></button>
+            <button onclick="switchPage('pairPage', 2)" class="nav-btn"><svg viewBox="0 0 24 24"><path d="M17 1H7c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-2-2-2zm0 18H7V5h10v14z"/></svg></button>
+        </div>
+    </div>
+
+    <!-- HALAMAN 4: PAIR WHATSAPP -->
+    <div id="pairPage" class="page">
+        <h2 class="page-title">PAIR WHATSAPP</h2>
+        <div class="comic-box" style="text-align: center; padding: 50px;">
+            <button onclick="showPopup('pairPopup')" class="btn-plus">+</button>
+        </div>
+        
+        <div id="pairList" class="comic-box" style="display:none; margin-top: 20px;">
+            <div class="paired-item">
+                <div>
+                    <p id="pairedNumber" style="font-weight:bold;">628xxx</p>
+                    <p id="pairedCode" style="font-weight:bold; color:#ff0000;">ABCD-1234</p>
+                </div>
+                <button onclick="deletePair()" class="btn-delete">X</button>
+            </div>
+        </div>
+
+        <div class="bottom-nav">
+            <button onclick="switchPage('homePage', 0)" class="nav-btn"><svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg></button>
+            <button onclick="switchPage('waPage', 1)" class="nav-btn"><svg viewBox="0 0 24 24"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0012.04 2z"/></svg></button>
+            <button onclick="switchPage('pairPage', 2)" class="nav-btn active"><svg viewBox="0 0 24 24"><path d="M17 1H7c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-2-2-2zm0 18H7V5h10v14z"/></svg></button>
+        </div>
+    </div>
+
+    <!-- ================= POPUP HTML MURNI ================= -->
+    
+    <!-- POPUP PAIR -->
+    <div id="pairPopup" class="popup-overlay">
+        <div class="popup-content comic-box">
+            <button class="btn-x" onclick="closePopup('pairPopup')">X</button>
+            <h3 style="margin-bottom:15px;">Masukkan Nomor WA</h3>
+            <input type="number" id="pairInput" placeholder="62xxxxxxxxxx">
+            <button onclick="pairWhatsapp()" class="btn-comic">PAIR</button>
+        </div>
+    </div>
+
+    <!-- POPUP ALERT (Pesan Error / Sukses) -->
+    <div id="alertPopup" class="popup-overlay">
+        <div class="popup-content comic-box">
+            <button class="btn-x" onclick="closePopup('alertPopup')">X</button>
+            <h3 style="margin-bottom:15px;" id="alertTitle">INFO</h3>
+            <p id="alertMessage" style="font-weight:bold; margin-bottom:15px;">Pesan</p>
+        </div>
+    </div>
+
+    <!-- POPUP LOADING -->
+    <div id="loadingPopup" class="loading-overlay">
+        <div class="loader-circle">
+            <span id="countdown">5</span>
+        </div>
+        <div class="loading-box" id="loadingText">Mengirim bug ke nomor...</div>
+    </div>
+
+    <script>
+        // --- STATE ---
+        const currentUser = { username: "JEPRI", password: "147" };
+        let senderPribadi = 0; // Bisa lu ganti sesuka hati buat ngetes
+        let senderGlobal = 0;  // Bisa lu ganti sesuka hati buat ngetes
+
+        // --- NAVIGATION ---
+        function switchPage(pageId, navIndex) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+            
+            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+            const navs = document.querySelectorAll('.page.active .bottom-nav .nav-btn');
+            if(navs[navIndex]) navs[navIndex].classList.add('active');
+        }
+
+        // --- CUSTOM POPUP LOGIC ---
+        function showPopup(id) {
+            document.getElementById(id).classList.add('active');
+        }
+
+        function closePopup(id) {
+            document.getElementById(id).classList.remove('active');
+        }
+
+        function showAlert(title, msg) {
+            document.getElementById('alertTitle').innerText = title;
+            document.getElementById('alertMessage').innerText = msg;
+            showPopup('alertPopup');
+        }
+
+        // --- LOGIN ---
+        function login() {
+            const user = document.getElementById('username').value;
+            const pass = document.getElementById('password').value;
+
+            if (user === currentUser.username && pass === currentUser.password) {
+                switchPage('homePage', 0);
+                showAlert("SUKSES", "LOGIN BERHASIL TUAN! 😈");
+            } else {
+                showAlert("GAGAL", "USERNAME ATAU PASSWORD SALAH GOBLOK! 😈👿");
+            }
+        }
+
+        function logout() {
+            switchPage('loginPage');
+            document.getElementById('username').value = '';
+            document.getElementById('password').value = '';
+        }
+
+        // --- BUG MENU ---
+        let selectedBugType = "FC";
+        function selectBug(bugType, element) {
+            selectedBugType = bugType;
+            document.getElementById('selectedBugText').innerText = "Terpilih: " + bugType;
+            document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
+            element.classList.add('active');
+        }
+
+        let selectedSenderType = "Pribadi";
+        function selectSender(senderType, element) {
+            selectedSenderType = senderType;
+            document.querySelectorAll('.sender-card').forEach(c => c.classList.remove('active'));
+            element.classList.add('active');
+        }
+
+        // LOGIKA BACKEND KIRIM BUG
+        function sendBug() {
+            const target = document.getElementById('targetNumber').value;
+            if (!target) return showAlert("GAGAL", "MASUKIN NOMOR TARGET DULU ANJING! 😈🗿");
+
+            // Cek ketersediaan sender
+            if (selectedSenderType === 'Pribadi' && senderPribadi <= 0) {
+                return showAlert("GAGAL", "SENDER PRIBADI LU HABIS GOBLOK! 😈👿");
+            }
+            if (selectedSenderType === 'Global' && senderGlobal <= 0) {
+                return showAlert("GAGAL", "SENDER GLOBAL LU HABIS GOBLOK! 😈👿");
+            }
+
+            // Buka Loading
+            showPopup('loadingPopup');
+            let count = 5;
+            const countdownEl = document.getElementById('countdown');
+            const loadingText = document.getElementById('loadingText');
+            
+            loadingText.innerText = "Mengirim bug ke nomor " + target + "...";
+
+            const interval = setInterval(() => {
+                count--;
+                countdownEl.innerText = count;
+                if (count === 0) {
+                    clearInterval(interval);
+                    closePopup('loadingPopup');
+                    countdownEl.innerText = 5;
+
+                    // Pop up sukses kirim bug
+                    showAlert("SUKSES", "BUG TELAH DIKIRIM KE NOMOR TARGET: " + target);
+                    
+                    // Logic Backend (Simulasi)
+                    // Karena ini kirim bug, sender berkurang 1 sesuai jenisnya
+                    if (selectedSenderType === 'Pribadi') {
+                        senderPribadi--;
+                        document.getElementById('senderPribadiCount').innerText = "Sender: " + senderPribadi;
+                    } else {
+                        senderGlobal--;
+                        document.getElementById('senderGlobalCount').innerText = "Sender: " + senderGlobal;
+                    }
+                }
+            }, 1000);
+        }
+
+        // --- PAIR WHATSAPP ---
+        function pairWhatsapp() {
+            const num = document.getElementById('pairInput').value;
+            if (!num) return showAlert("GAGAL", "ISI NOMOR WA LO GOBLOK! 😈");
+
+            closePopup('pairPopup');
+            showPopup('loadingPopup');
+            let count = 5;
+            const countdownEl = document.getElementById('countdown');
+            const loadingText = document.getElementById('loadingText');
+            
+            loadingText.innerText = "Menunggu kode pairing...";
+
+            const interval = setInterval(() => {
+                count--;
+                countdownEl.innerText = count;
+                if (count === 0) {
+                    clearInterval(interval);
+                    closePopup('loadingPopup');
+                    countdownEl.innerText = 5;
+
+                    // Generate random code
+                    const code = Math.random().toString(36).substring(2, 10).toUpperCase();
+                    
+                    document.getElementById('pairedNumber').innerText = num;
+                    document.getElementById('pairedCode').innerText = code;
+                    document.getElementById('pairList').style.display = 'block';
+                    
+                    // Logic Backend (Simulasi)
+                    // Jika berhasil pair, Sender nambah 1 sesuai pilihan terakhir (atau bisa diganti)
+                    if (selectedSenderType === 'Pribadi') {
+                        senderPribadi++;
+                        document.getElementById('senderPribadiCount').innerText = "Sender: " + senderPribadi;
+                    } else {
+                        senderGlobal++;
+                        document.getElementById('senderGlobalCount').innerText = "Sender: " + senderGlobal;
+                    }
+                }
+            }, 1000);
+        }
+
+        function deletePair() {
+            document.getElementById('pairList').style.display = 'none';
+            document.getElementById('pairInput').value = '';
+        }
+    </script>
+</body>
+</html>

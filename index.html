@@ -11,6 +11,14 @@
         .page { display: none; width: 100%; max-width: 400px; height: 100vh; overflow-y: auto; background: #f4f4f4; position: relative; padding-bottom: 80px; }
         .page.active { display: block; }
 
+        /* Banner di Halaman Bug */
+        .banner-small {
+            margin: 20px 20px 0 20px; border: 4px solid #111; border-radius: 12px;
+            box-shadow: 8px 8px 0px #111; overflow: hidden; position: relative;
+            aspect-ratio: 16 / 9; background: #000;
+        }
+        .banner-small video { width: 100%; height: 100%; object-fit: cover; }
+
         .comic-box {
             background: #fff; border: 4px solid #111; border-radius: 12px;
             box-shadow: 8px 8px 0px #111; padding: 20px; margin: 20px;
@@ -43,9 +51,7 @@
             box-shadow: 8px 8px 0px #111; overflow: hidden; position: relative;
             aspect-ratio: 1237 / 720; background: #000;
         }
-        .banner-container video {
-            width: 100%; height: 100%; object-fit: cover;
-        }
+        .banner-container video { width: 100%; height: 100%; object-fit: cover; }
 
         /* Home */
         .account-info h2 { font-size: 18px; margin-bottom: 10px; border-bottom: 3px solid #111; padding-bottom: 5px; }
@@ -80,14 +86,13 @@
         .paired-item { display: flex; justify-content: space-between; align-items: center; background: #eee; padding: 15px; border: 3px solid #111; border-radius: 8px; margin-top: 15px; }
         .btn-delete { background: #ff0000; color: #fff; border: 2px solid #111; padding: 5px 10px; font-weight: bold; border-radius: 4px; cursor: pointer; }
 
-        /* ================= CUSTOM POPUP & LOADING ================= */
+        /* ================= POPUP & LOADING ================= */
         .popup-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 1000; justify-content: center; align-items: center; }
         .popup-overlay.active { display: flex; }
         .popup-content { width: 85%; max-width: 320px; text-align: center; position: relative; padding: 25px; }
         .btn-x { position: absolute; top: -15px; right: -15px; background: #ff0000; color: #fff; border: 3px solid #111; width: 35px; height: 35px; border-radius: 50%; font-size: 18px; font-weight: bold; cursor: pointer; box-shadow: 3px 3px 0 #111; display: flex; justify-content: center; align-items: center; }
         .btn-x:active { transform: translate(3px, 3px); box-shadow: 0 0 0 #111; }
 
-        /* Loading Overlay */
         .loading-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 999; flex-direction: column; justify-content: center; align-items: center; }
         .loading-overlay.active { display: flex; }
         .loader-circle { width: 120px; height: 120px; border: 8px solid #fff; border-top: 8px solid #ff0000; border-radius: 50%; display: flex; justify-content: center; align-items: center; animation: spin 1s linear infinite; margin-bottom: 20px; }
@@ -95,9 +100,43 @@
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         @keyframes spin-reverse { 0% { transform: rotate(360deg); } 100% { transform: rotate(0deg); } }
         .loading-box { background: #fff; border: 4px solid #111; padding: 20px; text-align: center; font-weight: bold; font-size: 16px; border-radius: 8px; box-shadow: 8px 8px 0 #ff0000; max-width: 80%; }
+
+        /* ================= THEME PAGE ================= */
+        .theme-grid { display: flex; flex-direction: column; gap: 15px; margin: 20px; }
+        .theme-card { padding: 20px; border: 4px solid #111; border-radius: 12px; cursor: pointer; font-weight: bold; text-align: center; transition: 0.3s; box-shadow: 8px 8px 0 #111; }
+        .theme-card:active { transform: translate(4px, 4px); box-shadow: 4px 4px 0 #111; }
+        
+        /* TEMA 1: COMIC 3D (Default) */
+        .theme-default .theme-card.t1 { background: #fff; color: #111; }
+        .theme-default .theme-card.t2 { background: #eee; color: #111; }
+        .theme-default .theme-card.t3 { background: #111; color: #fff; }
+
+        /* TEMA 2: ELEGANS */
+        body.theme-elegans { background: #fff; }
+        body.theme-elegans .page { background: #fff; color: #0a5c36; }
+        body.theme-elegans .comic-box, body.theme-elegans .banner-container, body.theme-elegans .banner-small { border-color: #0a5c36; box-shadow: 8px 8px 0px #0a5c36; }
+        body.theme-elegans .bottom-nav { border-color: #0a5c36; }
+        body.theme-elegans .nav-btn svg { fill: #0a5c36; opacity: 0.5; }
+        body.theme-elegans .nav-btn.active svg { fill: #0a5c36; opacity: 1; }
+        body.theme-elegans .theme-card.t2 { background: #0a5c36; color: #fff; }
+
+        /* TEMA 3: CHRONOS */
+        body.theme-chronos { background: #004d40; background-image: linear-gradient(90deg, transparent 50%, rgba(0, 255, 255, 0.1) 50%), linear-gradient(rgba(0, 255, 255, 0.1) 50%, transparent 50%); background-size: 40px 40px; animation: moveBg 3s linear infinite; }
+        @keyframes moveBg { 0% { background-position: 0 0; } 100% { background-position: 40px 40px; } }
+        body.theme-chronos .page { background: transparent; color: #00ffff; }
+        body.theme-chronos .comic-box, body.theme-chronos .banner-container, body.theme-chronos .banner-small, body.theme-chronos .bottom-nav { background: rgba(0, 77, 64, 0.9); border-color: #00ffff; box-shadow: 8px 8px 0px #00ffff; }
+        body.theme-chronos h1, body.theme-chronos h2, body.theme-chronos h3, body.theme-chronos p, body.theme-chronos label, body.theme-chronos div { color: #00ffff; }
+        body.theme-chronos input { background: rgba(0,0,0,0.5); color: #00ffff; border-color: #00ffff; }
+        body.theme-chronos .nav-btn svg { fill: #00ffff; opacity: 0.5; }
+        body.theme-chronos .nav-btn.active svg { fill: #00ffff; opacity: 1; }
+        body.theme-chronos .theme-card.t3 { background: #004d40; color: #00ffff; border-color: #00ffff; }
+
+        body.theme-elegans h1, body.theme-elegans h2, body.theme-elegans h3, body.theme-elegans p, body.theme-elegans label, body.theme-elegans div { color: #0a5c36; }
+        body.theme-elegans input { border-color: #0a5c36; color: #0a5c36; }
+        body.theme-elegans .btn-comic, body.theme-elegans .btn-plus, body.theme-elegans .btn-logout { background: #0a5c36; border-color: #0a5c36; color: #fff; }
     </style>
 </head>
-<body>
+<body class="theme-default">
 
     <!-- HALAMAN 1: LOGIN -->
     <div id="loginPage" class="page active">
@@ -117,12 +156,10 @@
             <button onclick="logout()" class="btn-logout"><svg viewBox="0 0 24 24"><path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/></svg></button>
         </div>
 
-        <!-- BANNER VIDEO -->
+        <!-- BANNER VIDEO BERANDA -->
         <div class="banner-container">
             <video autoplay loop muted playsinline>
-                <!-- Ganti URL src di bawah dengan link video custom lu -->
                 <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
-                Browser lu goblok, nggak support video!
             </video>
         </div>
         
@@ -144,10 +181,12 @@
             </div>
         </div>
 
+        <!-- NAVIGASI (4 TOMBOL) -->
         <div class="bottom-nav">
             <button onclick="switchPage('homePage', 0)" class="nav-btn active"><svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg></button>
             <button onclick="switchPage('waPage', 1)" class="nav-btn"><svg viewBox="0 0 24 24"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0012.04 2z"/></svg></button>
             <button onclick="switchPage('pairPage', 2)" class="nav-btn"><svg viewBox="0 0 24 24"><path d="M17 1H7c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-2-2-2zm0 18H7V5h10v14z"/></svg></button>
+            <button onclick="switchPage('themePage', 3)" class="nav-btn"><svg viewBox="0 0 24 24"><path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9c.83 0 1.5-.67 1.5-1.5 0-.39-.15-.74-.39-1.01-.23-.26-.38-.61-.38-.99 0-.83.67-1.5 1.5-1.5H16c2.76 0 5-2.24 5-5 0-4.42-4.03-8-9-8zm-5.5 9c-.83 0-1.5-.67-1.5-1.5S5.67 9 6.5 9 8 9.67 8 10.5 7.33 12 6.5 12zm3-4C8.67 8 8 7.33 8 6.5S8.67 5 9.5 5s1.5.67 1.5 1.5S10.33 8 9.5 8zm5 0c-.83 0-1.5-.67-1.5-1.5S13.67 5 14.5 5s1.5.67 1.5 1.5S15.33 8 14.5 8zm3 4c-.83 0-1.5-.67-1.5-1.5S16.67 9 17.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg></button>
         </div>
     </div>
 
@@ -155,6 +194,13 @@
     <div id="waPage" class="page">
         <h2 class="page-title">BUG WHATSAPP</h2>
         
+        <!-- BANNER VIDEO BUG WHATSAPP -->
+        <div class="banner-small">
+            <video autoplay loop muted playsinline>
+                <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
+            </video>
+        </div>
+
         <div class="comic-box">
             <label>NOMOR TARGET</label>
             <input type="number" id="targetNumber" placeholder="62xxxxxxxxxx">
@@ -188,12 +234,13 @@
             </div>
         </div>
 
-        <button onclick="sendBug()" class="btn-comic btn-full" style="width: calc(100% - 40px); margin: 0 20px;">KIRIM BUG</button>
+        <button onclick="sendBug()" class="btn-comic btn-full" style="width: calc(100% - 40px); margin: 0 20px 20px 20px;">KIRIM BUG</button>
         
         <div class="bottom-nav">
             <button onclick="switchPage('homePage', 0)" class="nav-btn"><svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg></button>
             <button onclick="switchPage('waPage', 1)" class="nav-btn active"><svg viewBox="0 0 24 24"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0012.04 2z"/></svg></button>
             <button onclick="switchPage('pairPage', 2)" class="nav-btn"><svg viewBox="0 0 24 24"><path d="M17 1H7c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-2-2-2zm0 18H7V5h10v14z"/></svg></button>
+            <button onclick="switchPage('themePage', 3)" class="nav-btn"><svg viewBox="0 0 24 24"><path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9c.83 0 1.5-.67 1.5-1.5 0-.39-.15-.74-.39-1.01-.23-.26-.38-.61-.38-.99 0-.83.67-1.5 1.5-1.5H16c2.76 0 5-2.24 5-5 0-4.42-4.03-8-9-8zm-5.5 9c-.83 0-1.5-.67-1.5-1.5S5.67 9 6.5 9 8 9.67 8 10.5 7.33 12 6.5 12zm3-4C8.67 8 8 7.33 8 6.5S8.67 5 9.5 5s1.5.67 1.5 1.5S10.33 8 9.5 8zm5 0c-.83 0-1.5-.67-1.5-1.5S13.67 5 14.5 5s1.5.67 1.5 1.5S15.33 8 14.5 8zm3 4c-.83 0-1.5-.67-1.5-1.5S16.67 9 17.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg></button>
         </div>
     </div>
 
@@ -218,6 +265,34 @@
             <button onclick="switchPage('homePage', 0)" class="nav-btn"><svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg></button>
             <button onclick="switchPage('waPage', 1)" class="nav-btn"><svg viewBox="0 0 24 24"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0012.04 2z"/></svg></button>
             <button onclick="switchPage('pairPage', 2)" class="nav-btn active"><svg viewBox="0 0 24 24"><path d="M17 1H7c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-2-2-2zm0 18H7V5h10v14z"/></svg></button>
+            <button onclick="switchPage('themePage', 3)" class="nav-btn"><svg viewBox="0 0 24 24"><path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9c.83 0 1.5-.67 1.5-1.5 0-.39-.15-.74-.39-1.01-.23-.26-.38-.61-.38-.99 0-.83.67-1.5 1.5-1.5H16c2.76 0 5-2.24 5-5 0-4.42-4.03-8-9-8zm-5.5 9c-.83 0-1.5-.67-1.5-1.5S5.67 9 6.5 9 8 9.67 8 10.5 7.33 12 6.5 12zm3-4C8.67 8 8 7.33 8 6.5S8.67 5 9.5 5s1.5.67 1.5 1.5S10.33 8 9.5 8zm5 0c-.83 0-1.5-.67-1.5-1.5S13.67 5 14.5 5s1.5.67 1.5 1.5S15.33 8 14.5 8zm3 4c-.83 0-1.5-.67-1.5-1.5S16.67 9 17.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg></button>
+        </div>
+    </div>
+
+    <!-- HALAMAN 5: THEME -->
+    <div id="themePage" class="page">
+        <h2 class="page-title">PILIH TEMA</h2>
+        
+        <div class="theme-grid">
+            <div class="theme-card t1" onclick="changeTheme('theme-default')">
+                <h3>COMIC 3D</h3>
+                <p>Tema Default</p>
+            </div>
+            <div class="theme-card t2" onclick="changeTheme('theme-elegans')">
+                <h3>ELEGANS</h3>
+                <p>Hijau & Putih</p>
+            </div>
+            <div class="theme-card t3" onclick="changeTheme('theme-chronos')">
+                <h3>CHRONOS</h3>
+                <p>Biru & Hijau Menyala</p>
+            </div>
+        </div>
+
+        <div class="bottom-nav">
+            <button onclick="switchPage('homePage', 0)" class="nav-btn"><svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg></button>
+            <button onclick="switchPage('waPage', 1)" class="nav-btn"><svg viewBox="0 0 24 24"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0012.04 2z"/></svg></button>
+            <button onclick="switchPage('pairPage', 2)" class="nav-btn"><svg viewBox="0 0 24 24"><path d="M17 1H7c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-2-2-2zm0 18H7V5h10v14z"/></svg></button>
+            <button onclick="switchPage('themePage', 3)" class="nav-btn active"><svg viewBox="0 0 24 24"><path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9c.83 0 1.5-.67 1.5-1.5 0-.39-.15-.74-.39-1.01-.23-.26-.38-.61-.38-.99 0-.83.67-1.5 1.5-1.5H16c2.76 0 5-2.24 5-5 0-4.42-4.03-8-9-8zm-5.5 9c-.83 0-1.5-.67-1.5-1.5S5.67 9 6.5 9 8 9.67 8 10.5 7.33 12 6.5 12zm3-4C8.67 8 8 7.33 8 6.5S8.67 5 9.5 5s1.5.67 1.5 1.5S10.33 8 9.5 8zm5 0c-.83 0-1.5-.67-1.5-1.5S13.67 5 14.5 5s1.5.67 1.5 1.5S15.33 8 14.5 8zm3 4c-.83 0-1.5-.67-1.5-1.5S16.67 9 17.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg></button>
         </div>
     </div>
 
@@ -233,7 +308,7 @@
         </div>
     </div>
 
-    <!-- POPUP ALERT (Pesan Error / Sukses) -->
+    <!-- POPUP ALERT -->
     <div id="alertPopup" class="popup-overlay">
         <div class="popup-content comic-box">
             <button class="btn-x" onclick="closePopup('alertPopup')">X</button>
@@ -251,10 +326,11 @@
     </div>
 
     <script>
-        // --- STATE ---
-        const currentUser = { username: "JEPRI", password: "147" };
-        let senderPribadi = 0; // Bisa lu ganti sesuka hati buat ngetes
-        let senderGlobal = 0;  // Bisa lu ganti sesuka hati buat ngetes
+        // --- LINK VERCEL LU UDAH JEPRAK TEMPEL DI SINI ---
+        const API_URL = 'https://jeprak-api.vercel.app/api';
+        
+        let senderPribadi = 0;
+        let senderGlobal = 0;
 
         // --- NAVIGATION ---
         function switchPage(pageId, navIndex) {
@@ -266,31 +342,44 @@
             if(navs[navIndex]) navs[navIndex].classList.add('active');
         }
 
-        // --- CUSTOM POPUP LOGIC ---
-        function showPopup(id) {
-            document.getElementById(id).classList.add('active');
-        }
-
-        function closePopup(id) {
-            document.getElementById(id).classList.remove('active');
-        }
-
+        // --- POPUP LOGIC ---
+        function showPopup(id) { document.getElementById(id).classList.add('active'); }
+        function closePopup(id) { document.getElementById(id).classList.remove('active'); }
         function showAlert(title, msg) {
             document.getElementById('alertTitle').innerText = title;
             document.getElementById('alertMessage').innerText = msg;
             showPopup('alertPopup');
         }
 
+        // --- THEME LOGIC ---
+        function changeTheme(themeClass) {
+            document.body.className = themeClass;
+            showAlert("BERHASIL", "Tema berhasil diubah ke " + themeClass.replace('theme-', '').toUpperCase() + "!");
+            switchPage('homePage', 0);
+        }
+
         // --- LOGIN ---
-        function login() {
+        async function login() {
             const user = document.getElementById('username').value;
             const pass = document.getElementById('password').value;
 
-            if (user === currentUser.username && pass === currentUser.password) {
-                switchPage('homePage', 0);
-                showAlert("SUKSES", "LOGIN BERHASIL TUAN! 😈");
-            } else {
-                showAlert("GAGAL", "USERNAME ATAU PASSWORD SALAH GOBLOK! 😈👿");
+            // Panggil API Vercel buat login
+            try {
+                const res = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ action: 'login', username: user, password: pass })
+                });
+                const data = await res.json();
+                
+                if (data.status === 'success') {
+                    switchPage('homePage', 0);
+                    showAlert("SUKSES", "LOGIN BERHASIL TUAN! 😈");
+                } else {
+                    showAlert("GAGAL", data.message);
+                }
+            } catch (error) {
+                showAlert("ERROR", "Server Vercel belum nyala atau link salah!");
             }
         }
 
@@ -316,53 +405,57 @@
             element.classList.add('active');
         }
 
-        // LOGIKA BACKEND KIRIM BUG
-        function sendBug() {
+        // --- KIRIM BUG (Backend Logic) ---
+        async function sendBug() {
             const target = document.getElementById('targetNumber').value;
             if (!target) return showAlert("GAGAL", "MASUKIN NOMOR TARGET DULU ANJING! 😈🗿");
 
-            // Cek ketersediaan sender
-            if (selectedSenderType === 'Pribadi' && senderPribadi <= 0) {
-                return showAlert("GAGAL", "SENDER PRIBADI LU HABIS GOBLOK! 😈👿");
-            }
-            if (selectedSenderType === 'Global' && senderGlobal <= 0) {
-                return showAlert("GAGAL", "SENDER GLOBAL LU HABIS GOBLOK! 😈👿");
-            }
+            // Cek sender pake data dari database
+            try {
+                const res = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ action: 'sendBug', target, bugType: selectedBugType, senderType: selectedSenderType })
+                });
+                const data = await res.json();
 
-            // Buka Loading
-            showPopup('loadingPopup');
-            let count = 5;
-            const countdownEl = document.getElementById('countdown');
-            const loadingText = document.getElementById('loadingText');
-            
-            loadingText.innerText = "Mengirim bug ke nomor " + target + "...";
-
-            const interval = setInterval(() => {
-                count--;
-                countdownEl.innerText = count;
-                if (count === 0) {
-                    clearInterval(interval);
-                    closePopup('loadingPopup');
-                    countdownEl.innerText = 5;
-
-                    // Pop up sukses kirim bug
-                    showAlert("SUKSES", "BUG TELAH DIKIRIM KE NOMOR TARGET: " + target);
-                    
-                    // Logic Backend (Simulasi)
-                    // Karena ini kirim bug, sender berkurang 1 sesuai jenisnya
-                    if (selectedSenderType === 'Pribadi') {
-                        senderPribadi--;
-                        document.getElementById('senderPribadiCount').innerText = "Sender: " + senderPribadi;
-                    } else {
-                        senderGlobal--;
-                        document.getElementById('senderGlobalCount').innerText = "Sender: " + senderGlobal;
-                    }
+                if (data.status === 'error') {
+                    return showAlert("GAGAL", data.message);
                 }
-            }, 1000);
+
+                // Loading
+                showPopup('loadingPopup');
+                let count = 5;
+                const countdownEl = document.getElementById('countdown');
+                document.getElementById('loadingText').innerText = "Mengirim bug ke nomor " + target + "...";
+
+                const interval = setInterval(() => {
+                    count--;
+                    countdownEl.innerText = count;
+                    if (count === 0) {
+                        clearInterval(interval);
+                        closePopup('loadingPopup');
+                        countdownEl.innerText = 5;
+
+                        showAlert("SUKSES", "BUG TELAH DIKIRIM KE NOMOR TARGET: " + target);
+                        
+                        // Update Sender dari API
+                        if (selectedSenderType === 'Pribadi') {
+                            senderPribadi = data.newSender;
+                            document.getElementById('senderPribadiCount').innerText = "Sender: " + senderPribadi;
+                        } else {
+                            senderGlobal = data.newSender;
+                            document.getElementById('senderGlobalCount').innerText = "Sender: " + senderGlobal;
+                        }
+                    }
+                }, 1000);
+            } catch (error) {
+                showAlert("ERROR", "Gagal konek ke server!");
+            }
         }
 
         // --- PAIR WHATSAPP ---
-        function pairWhatsapp() {
+        async function pairWhatsapp() {
             const num = document.getElementById('pairInput').value;
             if (!num) return showAlert("GAGAL", "ISI NOMOR WA LO GOBLOK! 😈");
 
@@ -370,11 +463,9 @@
             showPopup('loadingPopup');
             let count = 5;
             const countdownEl = document.getElementById('countdown');
-            const loadingText = document.getElementById('loadingText');
-            
-            loadingText.innerText = "Menunggu kode pairing...";
+            document.getElementById('loadingText').innerText = "Menunggu kode pairing...";
 
-            const interval = setInterval(() => {
+            const interval = setInterval(async () => {
                 count--;
                 countdownEl.innerText = count;
                 if (count === 0) {
@@ -382,21 +473,26 @@
                     closePopup('loadingPopup');
                     countdownEl.innerText = 5;
 
-                    // Generate random code
-                    const code = Math.random().toString(36).substring(2, 10).toUpperCase();
-                    
-                    document.getElementById('pairedNumber').innerText = num;
-                    document.getElementById('pairedCode').innerText = code;
-                    document.getElementById('pairList').style.display = 'block';
-                    
-                    // Logic Backend (Simulasi)
-                    // Jika berhasil pair, Sender nambah 1 sesuai pilihan terakhir (atau bisa diganti)
-                    if (selectedSenderType === 'Pribadi') {
-                        senderPribadi++;
-                        document.getElementById('senderPribadiCount').innerText = "Sender: " + senderPribadi;
-                    } else {
-                        senderGlobal++;
-                        document.getElementById('senderGlobalCount').innerText = "Sender: " + senderGlobal;
+                    try {
+                        const res = await fetch(API_URL, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ action: 'pairWa', phone: num, senderType: selectedSenderType })
+                        });
+                        const data = await res.json();
+
+                        if (data.status === 'success') {
+                            document.getElementById('pairedNumber').innerText = num;
+                            document.getElementById('pairedCode').innerText = data.code;
+                            document.getElementById('pairList').style.display = 'block';
+
+                            if (selectedSenderType === 'Pribadi') { senderPribadi++; document.getElementById('senderPribadiCount').innerText = "Sender: " + senderPribadi; }
+                            else { senderGlobal++; document.getElementById('senderGlobalCount').innerText = "Sender: " + senderGlobal; }
+                        } else {
+                            showAlert("GAGAL", data.message);
+                        }
+                    } catch (error) {
+                        showAlert("ERROR", "Gagal konek ke server!");
                     }
                 }
             }, 1000);
